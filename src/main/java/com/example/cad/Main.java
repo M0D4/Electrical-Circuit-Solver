@@ -12,10 +12,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 
 public class Main extends Application {
@@ -26,12 +24,12 @@ public class Main extends Application {
     private Scene secondInputScene;
     private Alert errorAlert;
     private Stage stage;
-    private int att;
+    private int extraSpaceFactor;
 
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
-        att = 20;
+        extraSpaceFactor = 20;
         initHomeScreen();
 
         stage.setTitle("Electrical Circuit Solver");
@@ -98,11 +96,11 @@ public class Main extends Application {
                 errorAlert.showAndWait();
                 return;
             }
-            initMatrixInputScreen(height, width);
+            initIncidenceMatrixInputScreen(height, width);
         });
     }
 
-    public void initMatrixInputScreen(int height, int width){
+    public void initIncidenceMatrixInputScreen(int height, int width){
         GridPane matrixGridPane = makeGridPane();
 
         Label incidenceMatrixLabel = new Label("Enter Incidence Matrix (A)");
@@ -167,7 +165,7 @@ public class Main extends Application {
         Label matrixALabel = new Label("Incidence Matrix (A)");
         double[][] normalizedMatrixA = Utility.getNormalizedMatrix(incidenceMatrix);
         int newN = normalizedMatrixA.length;
-        screenHeight += newN * att; screenWidth += m * att;
+        screenHeight += newN * extraSpaceFactor; screenWidth += m * extraSpaceFactor;
         TextField[][] matrixA = new TextField[newN][m];
         for (int i = 0; i < newN; i++) {
             for (int j = 0; j < m; j++) {
@@ -185,7 +183,7 @@ public class Main extends Application {
         GridPane currentSourceGridPane = makeGridPane();
 
         TextField[] currentSourceInput = new TextField[m];
-        screenHeight += m * att;
+        screenHeight += m * extraSpaceFactor;
         for (int i = 0; i < currentSourceInput.length; i++) {
             currentSourceInput[i] = new TextField();
             GridPane.setConstraints(currentSourceInput[i], 0, i);
@@ -213,7 +211,7 @@ public class Main extends Application {
         GridPane resistorsGridPane = makeGridPane();
 
         TextField[][] resistorsInput = new TextField[m][m];
-        screenHeight += m * att; screenWidth += m * att;
+        screenHeight += m * extraSpaceFactor; screenWidth += m * extraSpaceFactor;
         for (int i = 0; i < resistorsInput.length; i++) {
             for (int j = 0; j < resistorsInput[0].length; j++) {
                 resistorsInput[i][j] = new TextField((i == j ? "" : "0"));
@@ -300,7 +298,7 @@ public class Main extends Application {
         tieSetMatrix = Utility.calculateBMatrixFromC(normalizedMatrixA, cutSetMatrix);
 
         n = tieSetMatrix.length; m = tieSetMatrix[0].length;
-        screenHeight += n * att; screenWidth += m * att;
+        screenHeight += n * extraSpaceFactor; screenWidth += m * extraSpaceFactor;
 
         Label matrixBLabel = new Label("Tie-Set Matrix (B)");
         TextField[][] matrixB = new TextField[tieSetMatrix.length][tieSetMatrix[0].length];
@@ -316,8 +314,8 @@ public class Main extends Application {
 
         Label matrixCLabel = new Label("Cut-Set Matrix (C)");
         TextField[][] matrixC = new TextField[cutSetMatrix.length][cutSetMatrix[0].length];
-        screenHeight += cutSetMatrix.length * att;
-        screenWidth += cutSetMatrix[0].length * att;
+        screenHeight += cutSetMatrix.length * extraSpaceFactor;
+        screenWidth += cutSetMatrix[0].length * extraSpaceFactor;
         for (int i = 0; i < cutSetMatrix.length; i++) {
             for (int j = 0; j < cutSetMatrix[0].length; j++) {
                 matrixC[i][j] = new TextField("" + cutSetMatrix[i][j]);
@@ -328,8 +326,8 @@ public class Main extends Application {
             }
         }
 
-        Label branchesCurrentLabel = new Label("Current in branches");
-        Label branchesVoltageLabel = new Label("Voltage in branches");
+        Label branchesCurrentLabel = new Label("Current in branches (Ampere)");
+        Label branchesVoltageLabel = new Label("Voltage in branches (Volt)");
         double[][] branchesCurrent, branchesVoltage;
         try {
             branchesCurrent = Utility.calculateBranchesCurrent(tieSetMatrix, resistorsMatrix,
@@ -344,7 +342,7 @@ public class Main extends Application {
             return;
         }
 
-        screenHeight += branchesCurrent.length * att;
+        screenHeight += branchesCurrent.length * extraSpaceFactor;
         TextField[] branchesCurrentTextFields = new TextField[branchesCurrent.length];
         for (int i = 0; i < branchesCurrent.length; i++) {
             branchesCurrentTextFields[i] = new TextField(branchesCurrent[i][0] + "");
