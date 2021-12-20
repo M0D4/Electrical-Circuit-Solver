@@ -43,6 +43,7 @@ public class Main extends Application {
     }
 
     public void initHomeScreen(){
+        Label incidenceMatrixSizeLabel = new Label("           Enter Incidence Matrix Size");
         Label heightLabel = new Label("Height: ");
         Label widthLabel = new Label("Width: ");
 
@@ -64,14 +65,18 @@ public class Main extends Application {
         enterButtonHBox.setAlignment(Pos.BASELINE_CENTER);
         enterButtonHBox.getChildren().addAll(enterButton);
 
+        HBox incidenceMatrixSizeHBox = makeHBox();
+        incidenceMatrixSizeHBox.getChildren().addAll(incidenceMatrixSizeLabel);
+
         GridPane homeSceneGrid = makeGridPane();
-        GridPane.setConstraints(heightBox, 1, 1);
-        GridPane.setConstraints(widthBox, 1, 2);
-        GridPane.setConstraints(enterButtonHBox, 1, 3);
+        GridPane.setConstraints(incidenceMatrixSizeHBox, 1, 1);
+        GridPane.setConstraints(heightBox, 1, 2);
+        GridPane.setConstraints(widthBox, 1, 3);
+        GridPane.setConstraints(enterButtonHBox, 1, 4);
 
-        homeSceneGrid.getChildren().addAll(heightBox, widthBox, enterButtonHBox);
+        homeSceneGrid.getChildren().addAll(incidenceMatrixSizeHBox, heightBox, widthBox, enterButtonHBox);
 
-        homeScene = new Scene(homeSceneGrid, 303, 125);
+        homeScene = new Scene(homeSceneGrid, 303, 175);
 
         enterButton.setOnAction(e -> {
             int height, width;
